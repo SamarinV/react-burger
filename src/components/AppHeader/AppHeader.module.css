@@ -1,0 +1,18 @@
+.header {
+	width: 100%;
+	margin: 40 50;
+}
+.wrapper{
+	margin: 0 auto;
+	max-width: 1320px;
+	display: grid;
+	align-items: center;
+	padding: 16px 0;
+	grid-template-columns: 1fr auto 1fr;
+}
+.wrapperForTwoButton{
+	display: flex;
+}
+.marginLeft{
+	margin-left: 8px;
+}

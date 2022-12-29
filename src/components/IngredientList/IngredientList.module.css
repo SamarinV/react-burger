@@ -1,0 +1,42 @@
+.wrapper{
+	margin-top: 40px;
+	overflow-y: scroll;
+	height: 350px;
+	scrollbar-color: #8585AD #2F2F37;
+	scrollbar-width: thin;
+}
+
+.wrapper::-webkit-scrollbar {
+		width: 8px;
+		background-color:#2F2F37;
+	}
+
+/* ползунок скроллбара */
+.wrapper::-webkit-scrollbar-thumb {
+		background-color: #8585AD;
+}
+
+.sortBlock{
+	display: grid;
+	grid-template-columns: repeat(2,1fr);
+	margin: 24px 30px 65px 30px;
+	gap: 56px;
+}
+.element{
+	display: 'inline-block';
+	cursor: pointer;
+}
+.priceWrapper{
+	margin-top: 4px;
+	display: flex;
+	justify-content: center;
+}
+.price{
+	margin-right: 8px;
+}
+.description{
+	margin-top: 8px;
+	max-width: 400px;
+	text-align: center;
+}
+
