@@ -1,4 +1,13 @@
-.wrapper{
+.section {
+	max-width: 600px;
+}
+
+.tabWrapper {
+	display: flex;
+	margin-top: 20px;
+}
+
+.wrapper {
 	margin-top: 40px;
 	overflow-y: scroll;
 	height: 350px;
@@ -7,36 +16,39 @@
 }
 
 .wrapper::-webkit-scrollbar {
-		width: 8px;
-		background-color:#2F2F37;
-	}
+	width: 8px;
+	background-color: #2F2F37;
+}
 
 /* ползунок скроллбара */
 .wrapper::-webkit-scrollbar-thumb {
-		background-color: #8585AD;
+	background-color: #8585AD;
 }
 
-.sortBlock{
+.sortBlock {
 	display: grid;
-	grid-template-columns: repeat(2,1fr);
+	grid-template-columns: repeat(2, 1fr);
 	margin: 24px 30px 65px 30px;
 	gap: 56px;
 }
-.element{
+
+.element {
 	display: 'inline-block';
 	cursor: pointer;
 }
-.priceWrapper{
+
+.priceWrapper {
 	margin-top: 4px;
 	display: flex;
 	justify-content: center;
 }
-.price{
+
+.price {
 	margin-right: 8px;
 }
-.description{
-	margin-top: 8px;
+
+.description {
+	margin-top: var(--m2);
 	max-width: 400px;
 	text-align: center;
 }
-

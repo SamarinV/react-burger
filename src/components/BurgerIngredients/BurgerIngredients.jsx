@@ -1,27 +1,44 @@
-import React, {useState} from 'react';
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import IngredientList from '../IngredientList/IngredientList';
-import styles from './BurgerIngredients.module.css';
+import styles from "./BurgerIngredients.module.css";
+import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
+const BurgerIngredients = ({ elem, onClick }) => {
+  return (
+    <div
+      className={styles.element}
+      onClick={onClick}
+      style={{ position: "relative" }}
+    >
+      {elem.count ? (
+        <div
+          style={{
+            position: "absolute",
+            width: 32,
+            height: 32,
+            backgroundColor: "blue",
+            borderRadius: 50,
+            top: 0,
+            right: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {elem.count}
+        </div>
+      ) : null}
 
-const BurgerIngredients  = ({onClick}) => {
-	const [ingredient, setIngredient] = useState('Булки')
-    return (
-				<section className={styles.section}>
-					<h1 className='text text_type_main-large'>Соберите бургер</h1>
-					<div className={styles.tabWrapper}>
-						<Tab value="one" active={ingredient === 'Булки'} onClick={()=>setIngredient('Булки')}>
-							Булки
-						</Tab>
-						<Tab value="two" active={ingredient === 'Соусы'} onClick={()=>setIngredient('Соусы')}>
-							Соусы
-						</Tab>
-						<Tab value="three" active={ingredient === 'Начинки'}  onClick={()=>setIngredient('Начинки')}>
-							Начинки
-						</Tab>
-					</div>
-					<IngredientList onClick={onClick}/>
-				</section>
-		)}
- 
+      <img src={elem.image} alt="ingredient" />
+      <div className={styles.priceWrapper}>
+        <span className={`text text_type_digits-default ${styles.price}`}>
+          {elem.price}
+        </span>
+        <CurrencyIcon />
+      </div>
+      <h4 className={`text text_type_default ${styles.description}`}>
+        {elem.name}
+      </h4>
+    </div>
+  );
+};
+
 export default BurgerIngredients;

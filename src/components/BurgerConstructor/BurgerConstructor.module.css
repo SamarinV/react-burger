@@ -6,21 +6,28 @@
 .constructor{
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
 	margin-left: 60px;
-	overflow-y: auto;
+
+}
+.mainCards {
+	padding-bottom: 16px;
+	overflow-y: auto;	
 	max-height: 350px;
 	scrollbar-color: #8585AD #2F2F37;
 	scrollbar-width: thin;
 }
-.constructor::-webkit-scrollbar {
+.mainCards::-webkit-scrollbar {
 	width: 8px;
 	background-color: #2F2F37;
 }
 
-.constructor::-webkit-scrollbar-thumb {
+.mainCards::-webkit-scrollbar-thumb {
 	background-color: #8585AD;
 }
+.card {
+	margin-top: 16px;
+}
+
 .price {
 	margin-top: 30px;
 	display: flex;
