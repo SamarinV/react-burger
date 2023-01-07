@@ -1,26 +1,25 @@
 .section {
-	max-width: 600px;
+	max-width: calc(6*var(--m25));
 }
 
 .tabWrapper {
 	display: flex;
-	margin-top: 20px;
+	margin-top: var(--m5);
 }
 
 .wrapper {
-	margin-top: 40px;
+	margin-top: var(--m10);
 	overflow-y: scroll;
-	height: 350px;
+	height: 450px;
 	scrollbar-color: #8585AD #2F2F37;
 	scrollbar-width: thin;
 }
 
 .wrapper::-webkit-scrollbar {
-	width: 8px;
+	width: var(--m2);
 	background-color: #2F2F37;
 }
 
-/* ползунок скроллбара */
 .wrapper::-webkit-scrollbar-thumb {
 	background-color: #8585AD;
 }
@@ -38,17 +37,17 @@
 }
 
 .priceWrapper {
-	margin-top: 4px;
+	margin-top: var(--m1);
 	display: flex;
 	justify-content: center;
 }
 
 .price {
-	margin-right: 8px;
+	margin-right: var(--m2);
 }
 
 .description {
 	margin-top: var(--m2);
-	max-width: 400px;
+	max-width: calc(4*var(--m25));
 	text-align: center;
 }
