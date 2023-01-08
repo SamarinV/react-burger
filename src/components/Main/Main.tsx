@@ -3,7 +3,7 @@ import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 import { useState, useRef, FC } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./Main.module.css";
-import { INGREDIENTS } from "../constants/constants";
+import { INGREDIENTS } from "../../utils/mocData";
 import { TypeConstructorElem } from "../../types/types";
 import { TypeIngredientsElem } from "../../types/types";
 
@@ -51,7 +51,6 @@ const Main: FC = () => {
 		if(ref && ref.current){
     setIngredientTab(name);
     ref.current.scrollIntoView();
-
 		}
   };
 
@@ -127,10 +126,10 @@ const Main: FC = () => {
       <div ref={ref}>
         <span className="text text_type_main-medium">{category}</span>
         <div className={styles.sortBlock}>
-          {elements.map((elem, index) => (
+          {elements.map((elem) => (
             <BurgerIngredients
               elem={elem}
-              key={index}
+              key={elem._id}
               onClick={() => addNewIngredient(elem)}
             />
           ))}

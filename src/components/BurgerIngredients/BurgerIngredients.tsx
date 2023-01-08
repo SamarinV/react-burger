@@ -13,7 +13,7 @@ const BurgerIngredients: FC <Props> = ({ elem, onClick }) => {
     <div className={styles.element} onClick={onClick}>
       {elem.count ? <div className={styles.count}>{elem.count}</div> : null}
 
-      <img src={elem.image} alt="ingredient" />
+      <img src={elem.image} alt={elem.name} />
       <div className={styles.priceWrapper}>
         <span className={`text text_type_digits-default ${styles.price}`}>
           {elem.price}

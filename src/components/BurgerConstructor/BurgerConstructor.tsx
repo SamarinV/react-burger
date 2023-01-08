@@ -7,6 +7,7 @@ import {
 import { FC } from "react";
 import styles from "./BurgerConstructor.module.css";
 import { TypeConstructorElem } from "../../types/types";
+import { v4 as uuid } from "uuid";
 
 type Props = {
 	array: TypeConstructorElem[],
@@ -33,9 +34,9 @@ const BurgerConstructor: FC<Props> = ({ array, price }) => {
         </div>
 
         <div className={styles.mainCards}>
-          {mainElements.map((elem, index) => {
+          {mainElements.map((elem) => {
             return (
-              <div key={index} className={`${styles.card} ${styles.cardMain}`}>
+              <div key={uuid()} className={`${styles.card} ${styles.cardMain}`}>
                 <span className={styles.dragIcon}>
                   <DragIcon type="primary" />
                 </span>

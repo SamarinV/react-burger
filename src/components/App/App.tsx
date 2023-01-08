@@ -1,6 +1,6 @@
 import styles from "./App.module.css";
-import Appheader from "./components/AppHeader/AppHeader";
-import Main from "./components/Main/Main";
+import Appheader from "../AppHeader/AppHeader";
+import Main from "../Main/Main";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
         <Appheader />
       </div>
       <main className={styles.main}>
-        <div style={{ display: "flex" }}>
+        <div className={styles.wrapper}>
           <Main />
         </div>
       </main>
