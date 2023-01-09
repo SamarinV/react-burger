@@ -1,0 +1,53 @@
+.section{
+	margin-top: var(--m15);
+}
+.constructor{
+	display: flex;
+	flex-direction: column;
+	margin-left: var(--m15);
+	padding-left: var(--m4);
+
+}
+.mainCards {
+	padding-right: var(--m2);
+	margin-top: var(--m4);
+	margin-bottom: var(--m4);
+	overflow-y: auto;	
+	max-height: 350px;
+	scrollbar-color: #8585AD #2F2F37;
+	scrollbar-width: thin;
+}
+.mainCards::-webkit-scrollbar {
+	width: var(--m2);
+	background-color: #2F2F37;
+}
+.mainCards::-webkit-scrollbar-thumb {
+	background-color: #8585AD;
+}
+.card {
+	display: flex;
+	align-items: center;
+}
+.cardTopBottom {
+	padding-right: var(--m4);
+	padding-left: var(--m8);
+}
+.cardMain {
+	margin-top: var(--m4);
+}
+.cardMain:first-child {
+	margin-top: 0;
+}
+.price {
+	margin-top: var(--m10);
+	display: flex;
+	align-items: center;
+	justify-content: end;
+}
+.primaryIcon {
+	margin-right: var(--m10);
+	margin-left: var(--m3);
+}
+.dragIcon {
+	margin-right: var(--m4);
+}
