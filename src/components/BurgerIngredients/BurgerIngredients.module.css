@@ -1,20 +1,40 @@
-.element {
-	display: inline-block;
-	cursor: pointer;
-	position: relative;
+.section {
+	max-width: calc(6*var(--m25));
 }
 
-.count {
-	position: absolute;
-	width: var(--m8);
-	height: var(--m8);
-	background-color: blue;
-	border-radius: 50%;
-	top: 0;
-	right: 0;
+.tabWrapper {
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	margin-top: var(--m5);
+}
+
+.wrapper {
+	margin-top: var(--m10);
+	overflow-y: scroll;
+	scroll-behavior: smooth;
+	height: 450px;
+	scrollbar-color: #8585AD #2F2F37;
+	scrollbar-width: thin;
+}
+
+.wrapper::-webkit-scrollbar {
+	width: var(--m2);
+	background-color: #2F2F37;
+}
+
+.wrapper::-webkit-scrollbar-thumb {
+	background-color: #8585AD;
+}
+
+.sortBlock {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	margin: 24px 30px 65px 30px;
+	gap: 56px;
+}
+
+.element {
+	display: 'inline-block';
+	cursor: pointer;
 }
 
 .priceWrapper {

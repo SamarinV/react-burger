@@ -1,0 +1,34 @@
+.element {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+}
+
+.count {
+	position: absolute;
+	width: var(--m8);
+	height: var(--m8);
+	background-color: blue;
+	border-radius: 50%;
+	top: 0;
+	right: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.priceWrapper {
+	margin-top: var(--m1);
+	display: flex;
+	justify-content: center;
+}
+
+.price {
+	margin-right: var(--m2);
+}
+
+.description {
+	margin-top: var(--m2);
+	max-width: calc(4*var(--m25));
+	text-align: center;
+}

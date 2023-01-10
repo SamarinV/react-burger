@@ -12,8 +12,6 @@
 }
 .main{
 	margin-top: var(--m10);
-}
-.wrapper {
 	display: flex;
 }
 
