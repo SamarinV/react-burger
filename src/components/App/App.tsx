@@ -16,7 +16,7 @@ function App() {
   const [price, setPrice] = useState(0); //итоговая стоимость в конструкторе
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isOpenModal, setOpenModal] = useState<TypeOpenModal>({
+  const [isOpenModal, setIsOpenModal] = useState<TypeOpenModal>({
     isOpen: false,
     type: "",
   });
@@ -91,11 +91,11 @@ function App() {
           <main className={styles.main}>
             <BurgerIngredients
               ingredients={ingredients}
-              openModal={setOpenModal}
+              openModal={setIsOpenModal}
               setContentModal={setContentModal}
             />
             <BurgerConstructor
-              openModal={setOpenModal}
+              openModal={setIsOpenModal}
               array={constructor}
               price={price}
             />
@@ -103,7 +103,7 @@ function App() {
           <div>
             <Modal
               isOpenModal={isOpenModal}
-              closeModal={setOpenModal}
+              closeModal={setIsOpenModal}
               contentModal={contentModal}
             />
           </div>
