@@ -8,46 +8,60 @@ import { useEffect, useState } from "react";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import Modal from "../Modal/Modal";
 import Loader from "../../UI/Loader";
+import { API_INGREDIENTS } from "../../constants";
 
 function App() {
-  //начальные элементы для конструктора
-  const [constructor, setConstructor] = useState<TypeConstructorElem[]>([
-    {
-      _id: "60d3b41abdacab0026a733c6",
-      type: "top",
-      isLocked: true,
-      text: "Краторная булка N-200i (верх)",
-      price: 1255,
-      thumbnail: "https://code.s3.yandex.net/react/code/bun-02.png",
-    },
-    {
-      _id: "60d3b41abdacab0026a733ca",
-      text: "Говяжий метеорит (отбивная)",
-      price: 3000,
-      thumbnail: "https://code.s3.yandex.net/react/code/meat-04.png",
-    },
-    {
-      _id: "60d3b41abdacab0026a733c6",
-      type: "bottom",
-      isLocked: true,
-      text: "Краторная булка N-200i (низ)",
-      price: 1255,
-      thumbnail: "https://code.s3.yandex.net/react/code/bun-02.png",
-    },
-  ]);
-
-  const [isLoading, setIsLoading] = useState(false);
   const [ingredients, setIngredients] = useState<TypeIngredientsElem[]>([]);
+  const [constructor, setConstructor] = useState<TypeConstructorElem[]>([]);
+  const [price, setPrice] = useState(0); //итоговая стоимость в конструкторе
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isOpenModal, setOpenModal] = useState<TypeOpenModal>({
+    isOpen: false,
+    type: "",
+  });
+  const [contentModal, setContentModal] = useState<TypeIngredientsElem | null>(
+    null
+  );
 
   function fetchIngredients() {
     setIsLoading(true);
-    fetch("https://norma.nomoreparties.space/api/ingredients")
+    fetch(API_INGREDIENTS)
       .then((resp) => resp.json())
       .then(({ data }: { data: TypeIngredientsElem[] }) => {
+        const bread = data.find((elem) => elem.type === "bun")!;
+        const main = data.find((elem) => elem.type === "main")!;
+        const defaultConstructor: TypeConstructorElem[] = [
+          {
+            _id: bread._id,
+            type: "top",
+            isLocked: true,
+            text: bread.name + " (верх)",
+            price: bread.price,
+            thumbnail: bread.image || "",
+          },
+          {
+            _id: main._id,
+            text: main.name,
+            price: main.price,
+            thumbnail: main.image || "",
+          },
+          {
+            _id: bread._id,
+            type: "bottom",
+            isLocked: true,
+            text: bread.name + " (низ)",
+            price: bread.price,
+            thumbnail: bread.image || "",
+          },
+        ];
+        setConstructor(defaultConstructor);
+        setPrice(
+          defaultConstructor.reduce((sum, element) => sum + element.price, 0)
+        );
         setIngredients(
           data.map((el) => {
-            el.count = constructor.some((c) => c._id === el._id) ? 1 : 0;
+            el.count = defaultConstructor.some((c) => c._id === el._id) ? 1 : 0;
             return el;
           })
         );
@@ -62,20 +76,6 @@ function App() {
   useEffect(() => {
     fetchIngredients();
   }, []);
-
-  //Итоговая стоимость в кострукторе
-  const recountPrice = (array: TypeConstructorElem[]) => {
-    return array.reduce((sum, element) => sum + element.price, 0);
-  };
-  const [price, setPrice] = useState(recountPrice(constructor));
-
-  const [isOpenModal, setOpenModal] = useState<TypeOpenModal>({
-    isOpen: false,
-    type: "",
-  }); //для портала
-  const [contentModal, setContentModal] = useState<TypeIngredientsElem | null>(
-    null
-  ); //по клику меняем контент для модала
 
   return (
     <div className={styles.App}>
@@ -116,27 +116,30 @@ function App() {
 export default App;
 
 //FUTURE Добавление ингредиентов в конструктор и обновление значений count в ингредиентах
-
 // const addNewIngredient = (newElem: TypeIngredientsElem) => {
 //   const newArrayConstructor = [...constructor];
-// 	const newArrayIngredients = [...ingredients]
+//   const newArrayIngredients = [...ingredients];
 
 //   if (newElem.type === "bun") {
 //     newArrayIngredients.map((element) => {
-//       if (element.type === "bun" && element.name !== newElem.name) { element.count = 0 }
+//       if (element.type === "bun" && element.name !== newElem.name) {
+//         element.count = 0;
+//       }
 //       return element;
 //     });
-// 		newArrayIngredients.map((element) => {
-// 			if (element.name === newElem.name) { element.count = 1 }
+//     newArrayIngredients.map((element) => {
+//       if (element.name === newElem.name) {
+//         element.count = 1;
+//       }
 //       return element;
-// 		})
+//     });
 //     newArrayConstructor.splice(0, 1, {
 //       _id: newElem._id,
 //       type: "top",
 //       isLocked: true,
 //       text: newElem.name + " (верх)",
 //       price: newElem.price,
-//       thumbnail: newElem.image || ''
+//       thumbnail: newElem.image || "",
 //     });
 //     newArrayConstructor.splice(newArrayConstructor.length - 1, 1, {
 //       _id: newElem._id,
@@ -144,22 +147,23 @@ export default App;
 //       isLocked: true,
 //       text: newElem.name + " (низ)",
 //       price: newElem.price,
-//       thumbnail: newElem.image || ''
+//       thumbnail: newElem.image || "",
 //     });
-
 //   } else {
-// 		newArrayIngredients.map((element) => {
-// 			if (element.name === newElem.name) { element.count++ }
+//     newArrayIngredients.map((element) => {
+//       if (element.name === newElem.name) {
+//         element.count++;
+//       }
 //       return element;
-// 		})
+//     });
 //     newArrayConstructor.splice(1, 0, {
 //       _id: newElem._id,
 //       text: newElem.name,
 //       price: newElem.price,
-//       thumbnail: newElem.image || ''
+//       thumbnail: newElem.image || "",
 //     });
 //   }
-// 	setIngredients(newArrayIngredients)
+//   setIngredients(newArrayIngredients);
 //   setConstructor(newArrayConstructor);
 //   setPrice(recountPrice(newArrayConstructor));
 // };
