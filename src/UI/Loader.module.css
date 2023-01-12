@@ -1,0 +1,26 @@
+.wrapperLoader {
+	display: flex;
+	justify-content: center;
+	margin-top: 200px;
+}
+
+.loader {
+	width: 90px;
+	height: 90px;
+	border: 7px solid rgb(160, 159, 159);
+	border-bottom-color: transparent;
+	border-radius: 50%;
+	display: inline-block;
+	box-sizing: border-box;
+	animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
+}

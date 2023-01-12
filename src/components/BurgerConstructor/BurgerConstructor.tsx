@@ -7,14 +7,16 @@ import {
 import { FC } from "react";
 import styles from "./BurgerConstructor.module.css";
 import { TypeConstructorElem } from "../../types/types";
+import { TypeOpenModal } from "../../types/types";
 import { v4 as uuid } from "uuid";
 
 type Props = {
-	array: TypeConstructorElem[],
-	price: number,
-}
+  openModal: React.Dispatch<React.SetStateAction<TypeOpenModal>>;
+  array: TypeConstructorElem[];
+  price: number;
+};
 
-const BurgerConstructor: FC<Props> = ({ array, price }) => {
+const BurgerConstructor: FC<Props> = ({ array, price, openModal }) => {
   const topElement = array.find((elem) => elem.type === "top");
   const bottomElement = array.find((elem) => elem.type === "bottom");
   const mainElements = array.filter(
@@ -29,7 +31,7 @@ const BurgerConstructor: FC<Props> = ({ array, price }) => {
             isLocked={true}
             text={`${topElement?.text}`}
             price={topElement?.price || 0}
-            thumbnail={topElement?.thumbnail || ''}
+            thumbnail={topElement?.thumbnail || ""}
           />
         </div>
 
@@ -67,7 +69,12 @@ const BurgerConstructor: FC<Props> = ({ array, price }) => {
         <span className={styles.primaryIcon}>
           <CurrencyIcon type="primary" />
         </span>
-        <Button htmlType="button" type="primary" size="medium">
+        <Button
+          onClick={() => openModal({ isOpen: true, type: "placeAnOrder" })}
+          htmlType="button"
+          type="primary"
+          size="medium"
+        >
           Оформить заказ
         </Button>
       </div>

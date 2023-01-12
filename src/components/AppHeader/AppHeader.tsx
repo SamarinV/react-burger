@@ -8,7 +8,7 @@ import {
 import { FC } from "react";
 import styles from "./AppHeader.module.css";
 
-const AppHeader : FC = () => {
+const AppHeader: FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.wrapper}>
