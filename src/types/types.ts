@@ -22,8 +22,3 @@ export type TypeConstructorElem = {
 		price: number,
 		thumbnail: string,
 }
-
-export type TypeOpenModal = {
-	isOpen: boolean,
-	type: 'ingredient' | 'placeAnOrder' | ''
-}

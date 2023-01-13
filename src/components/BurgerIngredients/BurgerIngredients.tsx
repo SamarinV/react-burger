@@ -3,21 +3,18 @@ import { useState, useRef, FC } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./BurgerIngredients.module.css";
 import { TypeIngredientsElem } from "../../types/types";
-import { TypeOpenModal } from "../../types/types";
+import Modal from "../Modal/Modal";
+import IngredientsDetails from "../IngredientDetails/IngredientDetails";
 
 type Props = {
   ingredients: TypeIngredientsElem[];
-  openModal: (value: React.SetStateAction<TypeOpenModal>) => void;
-  setContentModal: React.Dispatch<
-    React.SetStateAction<TypeIngredientsElem | null>
-  >;
 };
 
-const BurgerIngredients: FC<Props> = ({
-  ingredients,
-  openModal,
-  setContentModal,
-}) => {
+const BurgerIngredients: FC<Props> = ({ ingredients }) => {
+  const [dataModal, setDataModal] = useState<TypeIngredientsElem | null>(null);
+  const closeModal = () => {
+    setDataModal(null);
+  };
   // ТАБЫ
   const [ingredientTab, setIngredientTab] = useState("Булки");
   const scrollToBread = useRef<HTMLDivElement>(null);
@@ -58,9 +55,8 @@ const BurgerIngredients: FC<Props> = ({
           {elements.map((elem) => (
             <Ingredient
               elem={elem}
+              setDataModal={setDataModal}
               key={elem._id}
-              openModal={openModal}
-              setContentModal={setContentModal}
             />
           ))}
         </div>
@@ -106,6 +102,11 @@ const BurgerIngredients: FC<Props> = ({
           {sortListForType(sauceIngredient, "Соусы", scrollToSauce)}
           {sortListForType(mainIngredient, "Начинки", scrollToMainIngredient)}
         </div>
+        {dataModal && (
+          <Modal title="Детали ингредиента" closeModal={closeModal}>
+            <IngredientsDetails elem={dataModal}></IngredientsDetails>
+          </Modal>
+        )}
       </section>
     </>
   );

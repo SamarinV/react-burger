@@ -3,10 +3,8 @@ import Appheader from "../AppHeader/AppHeader";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 import { TypeConstructorElem } from "../../types/types";
 import { TypeIngredientsElem } from "../../types/types";
-import { TypeOpenModal } from "../../types/types";
 import { useEffect, useState } from "react";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
-import Modal from "../Modal/Modal";
 import Loader from "../../UI/Loader";
 import { API_INGREDIENTS } from "../../constants";
 
@@ -16,18 +14,16 @@ function App() {
   const [price, setPrice] = useState(0); //итоговая стоимость в конструкторе
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isOpenModal, setIsOpenModal] = useState<TypeOpenModal>({
-    isOpen: false,
-    type: "",
-  });
-  const [contentModal, setContentModal] = useState<TypeIngredientsElem | null>(
-    null
-  );
 
   function fetchIngredients() {
     setIsLoading(true);
     fetch(API_INGREDIENTS)
-      .then((resp) => resp.json())
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Ошибка ${res.status}`);
+      })
       .then(({ data }: { data: TypeIngredientsElem[] }) => {
         const bread = data.find((elem) => elem.type === "bun")!;
         const main = data.find((elem) => elem.type === "main")!;
@@ -79,9 +75,9 @@ function App() {
 
   return (
     <div className={styles.App}>
-      <header className={styles.headerWrapper}>
+      <div className={styles.headerWrapper}>
         <Appheader />
-      </header>
+      </div>
       {isLoading ? (
         <Loader />
       ) : isError ? (
@@ -89,24 +85,9 @@ function App() {
       ) : (
         <>
           <main className={styles.main}>
-            <BurgerIngredients
-              ingredients={ingredients}
-              openModal={setIsOpenModal}
-              setContentModal={setContentModal}
-            />
-            <BurgerConstructor
-              openModal={setIsOpenModal}
-              array={constructor}
-              price={price}
-            />
+            <BurgerIngredients ingredients={ingredients} />
+            <BurgerConstructor array={constructor} price={price} />
           </main>
-          <div>
-            <Modal
-              isOpenModal={isOpenModal}
-              closeModal={setIsOpenModal}
-              contentModal={contentModal}
-            />
-          </div>
         </>
       )}
     </div>

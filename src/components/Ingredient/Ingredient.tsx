@@ -2,23 +2,17 @@ import styles from "./Ingredient.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC } from "react";
 import { TypeIngredientsElem } from "../../types/types";
-import { TypeOpenModal } from "../../types/types";
 
 type Props = {
   elem: TypeIngredientsElem;
-  openModal: (value: React.SetStateAction<TypeOpenModal>) => void;
-  setContentModal: React.Dispatch<
+  setDataModal: React.Dispatch<
     React.SetStateAction<TypeIngredientsElem | null>
   >;
 };
 
-const Ingredient: FC<Props> = ({ elem, openModal, setContentModal }) => {
-  const funcOpenModal = () => {
-    setContentModal(elem);
-    openModal({ isOpen: true, type: "ingredient" });
-  };
+const Ingredient: FC<Props> = ({ elem, setDataModal }) => {
   return (
-    <div className={styles.element} onClick={funcOpenModal}>
+    <div className={styles.element} onClick={() => setDataModal(elem)}>
       {elem.count ? <div className={styles.count}>{elem.count}</div> : null}
 
       <img src={elem.image} alt={elem.name} />
