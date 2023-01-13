@@ -4,15 +4,17 @@ import {
   Button,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { FC } from "react";
+import { FC, useState } from "react";
 import styles from "./BurgerConstructor.module.css";
 import { TypeConstructorElem } from "../../types/types";
 import { v4 as uuid } from "uuid";
+import Modal from "../Modal/Modal";
+import OrderDetails from "../OrderDetails/OrderDetails";
 
 type Props = {
-	array: TypeConstructorElem[],
-	price: number,
-}
+  array: TypeConstructorElem[];
+  price: number;
+};
 
 const BurgerConstructor: FC<Props> = ({ array, price }) => {
   const topElement = array.find((elem) => elem.type === "top");
@@ -20,6 +22,13 @@ const BurgerConstructor: FC<Props> = ({ array, price }) => {
   const mainElements = array.filter(
     (elem) => elem.type !== "top" && elem.type !== "bottom"
   );
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const closeModal = () => {
+    setIsOpenModal(false);
+  };
+  const openModal = () => {
+    setIsOpenModal(true);
+  };
   return (
     <section className={styles.section}>
       <div className={styles.constructor}>
@@ -29,7 +38,7 @@ const BurgerConstructor: FC<Props> = ({ array, price }) => {
             isLocked={true}
             text={`${topElement?.text}`}
             price={topElement?.price || 0}
-            thumbnail={topElement?.thumbnail || ''}
+            thumbnail={topElement?.thumbnail || ""}
           />
         </div>
 
@@ -67,10 +76,20 @@ const BurgerConstructor: FC<Props> = ({ array, price }) => {
         <span className={styles.primaryIcon}>
           <CurrencyIcon type="primary" />
         </span>
-        <Button htmlType="button" type="primary" size="medium">
+        <Button
+          onClick={() => openModal()}
+          htmlType="button"
+          type="primary"
+          size="medium"
+        >
           Оформить заказ
         </Button>
       </div>
+      {isOpenModal && (
+        <Modal closeModal={closeModal}>
+          <OrderDetails orderNumber="02456"></OrderDetails>
+        </Modal>
+      )}
     </section>
   );
 };
