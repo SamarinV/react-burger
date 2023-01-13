@@ -1,6 +1,6 @@
 import styles from "./Modal.module.css";
 import ModalOverlay from "../ModalOverlay/ModalOverlay";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
@@ -12,35 +12,29 @@ type Props = {
 const root = document.getElementById("modal")!;
 
 const Modal: FC<Props> = ({ closeModal, title, children }) => {
-  const closeKeyEscape = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
-      closeAndRemoveListener();
-    }
-  };
-  document.addEventListener("keydown", closeKeyEscape);
-  const closeAndRemoveListener = () => {
-    document.removeEventListener("keydown", closeKeyEscape);
-    closeModal();
-  };
+  useEffect(() => {
+    const closeByEscape = (e: KeyboardEvent) => {
+      e.key === "Escape" && closeModal();
+    };
+    document.addEventListener("keydown", closeByEscape);
+    return () => {
+      document.removeEventListener("keydown", closeByEscape);
+    };
+  }, [closeModal]);
 
   return ReactDOM.createPortal(
-    <>
-      <div className={styles.wrapper}>
-        <div className={styles.modal}>
-          <div className={styles.modalHeader}>
-            <h2 className="text text_type_main-large">{title}</h2>
-            <span
-              className={styles.modalClose}
-              onClick={() => closeAndRemoveListener()}
-            >
-              <CloseIcon type="primary" />
-            </span>
-          </div>
-          <div className={styles.content}>{children}</div>
+    <div className={styles.wrapper}>
+      <div className={styles.modal}>
+        <div className={styles.modalHeader}>
+          <h2 className="text text_type_main-large">{title}</h2>
+          <span className={styles.modalClose} onClick={closeModal}>
+            <CloseIcon type="primary" />
+          </span>
         </div>
-        <ModalOverlay onClick={() => closeAndRemoveListener()} />
+        <div className={styles.content}>{children}</div>
       </div>
-    </>,
+      <ModalOverlay onClick={closeModal} />
+    </div>,
     root
   );
 };
