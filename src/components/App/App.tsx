@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import Loader from "../../UI/Loader";
 import { API_INGREDIENTS } from "../../constants";
+import { ConstructorContext } from "../../context/ConstructorContext";
 
 function App() {
   const [ingredients, setIngredients] = useState<TypeIngredientsElem[]>([]);
@@ -57,7 +58,11 @@ function App() {
         );
         setIngredients(
           data.map((el) => {
-            el.count = defaultConstructor.some((c) => c._id === el._id) ? 1 : 0;
+            el.count = defaultConstructor.some((c) => c._id === el._id)
+              ? el.type === "bun"
+                ? 2
+                : 1
+              : 0;
             return el;
           })
         );
@@ -86,7 +91,9 @@ function App() {
         <>
           <main className={styles.main}>
             <BurgerIngredients ingredients={ingredients} />
-            <BurgerConstructor array={constructor} price={price} />
+            <ConstructorContext.Provider value={constructor}>
+              <BurgerConstructor price={price} />
+            </ConstructorContext.Provider>
           </main>
         </>
       )}

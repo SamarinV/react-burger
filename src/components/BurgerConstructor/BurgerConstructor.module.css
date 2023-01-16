@@ -9,7 +9,7 @@
 
 }
 .mainCards {
-	padding-right: var(--m2);
+	margin-right: var(--m2);
 	margin-top: var(--m4);
 	margin-bottom: var(--m4);
 	overflow-y: auto;	
@@ -42,12 +42,12 @@
 	margin-top: var(--m10);
 	display: flex;
 	align-items: center;
-	justify-content: end;
+	justify-content: flex-end;
 }
 .primaryIcon {
 	margin-right: var(--m10);
 	margin-left: var(--m3);
 }
 .dragIcon {
-	margin-right: var(--m4);
+	margin-right: var(--m2);
 }
