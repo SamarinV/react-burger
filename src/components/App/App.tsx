@@ -7,10 +7,11 @@ import { useEffect, useState } from "react";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import Loader from "../../UI/Loader";
 import { API_INGREDIENTS } from "../../constants";
+import { ConstructorContext } from "../../context/ConstructorContext";
 
 function App() {
   const [ingredients, setIngredients] = useState<TypeIngredientsElem[]>([]);
-  const [constructor, setConstructor] = useState<TypeConstructorElem[]>([]);
+  const [constructor, setConstructor] = useState<any>([]);
   const [price, setPrice] = useState(0); //итоговая стоимость в конструкторе
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -72,7 +73,6 @@ function App() {
   useEffect(() => {
     fetchIngredients();
   }, []);
-
   return (
     <div className={styles.App}>
       <div className={styles.headerWrapper}>
@@ -86,7 +86,9 @@ function App() {
         <>
           <main className={styles.main}>
             <BurgerIngredients ingredients={ingredients} />
-            <BurgerConstructor array={constructor} price={price} />
+            <ConstructorContext.Provider value={constructor}>
+              <BurgerConstructor price={price} />
+            </ConstructorContext.Provider>
           </main>
         </>
       )}
