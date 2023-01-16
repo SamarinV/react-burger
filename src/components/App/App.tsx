@@ -11,7 +11,7 @@ import { ConstructorContext } from "../../context/ConstructorContext";
 
 function App() {
   const [ingredients, setIngredients] = useState<TypeIngredientsElem[]>([]);
-  const [constructor, setConstructor] = useState<any>([]);
+  const [constructor, setConstructor] = useState<TypeConstructorElem[]>([]);
   const [price, setPrice] = useState(0); //итоговая стоимость в конструкторе
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -58,7 +58,11 @@ function App() {
         );
         setIngredients(
           data.map((el) => {
-            el.count = defaultConstructor.some((c) => c._id === el._id) ? 1 : 0;
+            el.count = defaultConstructor.some((c) => c._id === el._id)
+              ? el.type === "bun"
+                ? 2
+                : 1
+              : 0;
             return el;
           })
         );
@@ -73,6 +77,7 @@ function App() {
   useEffect(() => {
     fetchIngredients();
   }, []);
+
   return (
     <div className={styles.App}>
       <div className={styles.headerWrapper}>

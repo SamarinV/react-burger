@@ -6,12 +6,11 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useContext, useState } from "react";
 import styles from "./BurgerConstructor.module.css";
-import { TypeConstructorElem } from "../../types/types";
 import { v4 as uuid } from "uuid";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import { ConstructorContext } from "../../context/ConstructorContext";
-import Ingredient from "../Ingredient/Ingredient";
+import { API_ORDER } from "../../constants";
 
 type Props = {
   price: number;
@@ -38,7 +37,7 @@ const BurgerConstructor: FC<Props> = ({ price }) => {
   const ingredientsID = constructor?.map((elem) => elem._id);
 
   function fetchOrder() {
-    fetch("https://norma.nomoreparties.space/api/orders", {
+    fetch(API_ORDER, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ingredients: ingredientsID }),
@@ -127,6 +126,3 @@ const BurgerConstructor: FC<Props> = ({ price }) => {
 };
 
 export default BurgerConstructor;
-function then() {
-  throw new Error("Function not implemented.");
-}
