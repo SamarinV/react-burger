@@ -16,6 +16,7 @@ export type TypeIngredientsElem = {
 
 export type TypeConstructorElem = {
 		_id: string,
+		id_for_key?: string,
 		type?: "top" | "bottom",
 		isLocked?: boolean,
 		text: string,

@@ -19,11 +19,16 @@ type Props = {
 const BurgerConstructor: FC<Props> = ({ price }) => {
   const [orderNumber, setOrderNumber] = useState("");
   const constructor = useContext(ConstructorContext);
-  const topElement = constructor?.find((elem) => elem.type === "top");
-  const bottomElement = constructor?.find((elem) => elem.type === "bottom");
+  const breadElement = constructor?.find(
+    (elem) => elem.type === "top" || elem.type === "bottom"
+  );
   const mainElements = constructor?.filter(
     (elem) => elem.type !== "top" && elem.type !== "bottom"
   );
+  mainElements?.map((elem) => {
+    elem.id_for_key = uuid();
+    return elem;
+  });
 
   const [isOpenModal, setIsOpenModal] = useState(false);
   const closeModal = () => {
@@ -61,11 +66,11 @@ const BurgerConstructor: FC<Props> = ({ price }) => {
       <div className={styles.constructor}>
         <div className={`${styles.card} ${styles.cardTopBottom}`}>
           <ConstructorElement
-            type={topElement?.type}
+            type="top"
             isLocked={true}
-            text={`${topElement?.text}`}
-            price={topElement?.price || 0}
-            thumbnail={topElement?.thumbnail || ""}
+            text={`${breadElement?.text}`}
+            price={breadElement?.price || 0}
+            thumbnail={breadElement?.thumbnail || ""}
           />
         </div>
 
@@ -74,7 +79,7 @@ const BurgerConstructor: FC<Props> = ({ price }) => {
             mainElements.map((elem) => {
               return (
                 <div
-                  key={uuid()}
+                  key={elem.id_for_key}
                   className={`${styles.card} ${styles.cardMain}`}
                 >
                   <span className={styles.dragIcon}>
@@ -94,11 +99,11 @@ const BurgerConstructor: FC<Props> = ({ price }) => {
 
         <div className={`${styles.card} ${styles.cardTopBottom}`}>
           <ConstructorElement
-            type={bottomElement?.type}
+            type="bottom"
             isLocked={true}
-            text={`${bottomElement?.text}`}
-            price={bottomElement?.price || 0}
-            thumbnail={bottomElement?.thumbnail || ""}
+            text={`${breadElement?.text}`}
+            price={breadElement?.price || 0}
+            thumbnail={breadElement?.thumbnail || ""}
           />
         </div>
       </div>
