@@ -1,17 +1,25 @@
 import { FC } from "react";
+import { useSelector } from "react-redux";
+import Loader from "../../UI/Loader";
 import styles from "./OrderDetails.module.css";
 const logo = require("./done.png");
 
 type Props = {
-  orderNumber: string;
+  isOrderLoading: boolean;
 };
 
-const OrderDetails: FC<Props> = ({ orderNumber }) => {
+const OrderDetails: FC<Props> = ({ isOrderLoading }) => {
+  const orderNumber = useSelector((state: any) => state.orderNumber.items);
+
   return (
     <>
-      <h1 className={`text text_type_digits-large ${styles.orderCount}`}>
-        {orderNumber}
-      </h1>
+      {isOrderLoading ? (
+        <Loader />
+      ) : (
+        <h1 className={`text text_type_digits-large ${styles.orderCount}`}>
+          {orderNumber}
+        </h1>
+      )}
       <p className={`text text_type_main-large ${styles.paragraph}`}>
         Индификатор заказа
       </p>

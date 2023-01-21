@@ -2,17 +2,29 @@ import styles from "./Ingredient.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC } from "react";
 import { TypeIngredientsElem } from "../../types/types";
+import { useDrag } from "react-dnd";
+import { useDispatch, useSelector } from "react-redux";
+import { addModalContent } from "../../store/modalContentSlice";
 
 type Props = {
   elem: TypeIngredientsElem;
-  setDataModal: React.Dispatch<
-    React.SetStateAction<TypeIngredientsElem | null>
-  >;
 };
 
-const Ingredient: FC<Props> = ({ elem, setDataModal }) => {
+const Ingredient: FC<Props> = ({ elem }) => {
+  const dispatch = useDispatch();
+  const [{ isDrag }, dragRef] = useDrag({
+    type: "ingredients",
+    item: elem,
+    collect: (monitor) => ({
+      isDrag: monitor.isDragging(),
+    }),
+  });
   return (
-    <div className={styles.element} onClick={() => setDataModal(elem)}>
+    <div
+      ref={dragRef}
+      className={styles.element}
+      onClick={() => dispatch(addModalContent(elem))}
+    >
       {elem.count ? <div className={styles.count}>{elem.count}</div> : null}
 
       <img src={elem.image} alt={elem.name} />

@@ -4,7 +4,7 @@ import {
   Button,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import styles from "./BurgerConstructor.module.css";
 import { v4 as uuid } from "uuid";
 import Modal from "../Modal/Modal";
@@ -12,22 +12,34 @@ import OrderDetails from "../OrderDetails/OrderDetails";
 import { ConstructorContext } from "../../context/ConstructorContext";
 import { API_ORDER } from "../../constants";
 
+import { useSelector, useDispatch } from "react-redux";
+import { useDrop } from "react-dnd";
+import { TypeIngredientsElem } from "../../types/types";
+import { addOrder } from "../../store/orderNumberSlice";
+import { updateConstructorItems } from "../../store/constructorSlice";
+import { decreseCountIngredient } from "../../store/ingredientsSlice";
+
 type Props = {
-  price: number;
+  addNewIngredient: any;
 };
 
-const BurgerConstructor: FC<Props> = ({ price }) => {
-  const [orderNumber, setOrderNumber] = useState("");
-  const constructor = useContext(ConstructorContext);
-  const breadElement = constructor?.find(
-    (elem) => elem.type === "top" || elem.type === "bottom"
+const BurgerConstructor: FC<Props> = ({ addNewIngredient }) => {
+  const dispatch = useDispatch();
+
+  const constructor: TypeIngredientsElem[] = useSelector(
+    (store: any) => store.construtorIng.items
   );
-  const mainElements = constructor?.filter(
-    (elem) => elem.type !== "top" && elem.type !== "bottom"
-  );
-  mainElements?.map((elem) => {
-    elem.id_for_key = uuid();
-    return elem;
+
+  const [price, setPrice] = useState(0); //итоговая стоимость в конструкторе
+
+  const [{ isOver }, dropRef] = useDrop({
+    accept: "ingredients",
+    drop(item) {
+      addNewIngredient(item);
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
   });
 
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -39,9 +51,11 @@ const BurgerConstructor: FC<Props> = ({ price }) => {
     setIsOpenModal(true);
   };
 
-  const ingredientsID = constructor?.map((elem) => elem._id);
+  const ingredientsID = constructor.map((elem) => elem._id);
 
+  const [isOrderLoading, setIsOrderLoading] = useState(false);
   function fetchOrder() {
+    setIsOrderLoading(true);
     fetch(API_ORDER, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -54,58 +68,102 @@ const BurgerConstructor: FC<Props> = ({ price }) => {
         return Promise.reject(`Ошибка ${res.status}`);
       })
       .then((data) => {
-        setOrderNumber(data.order.number);
+        dispatch(addOrder(data.order.number));
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+      .finally(() => setIsOrderLoading(false));
   }
 
+  const [bun, setBun] = useState<TypeIngredientsElem | undefined>();
+  const [mainIngredients, setMainIngredients] = useState<
+    TypeIngredientsElem[] | null
+  >();
+
+  const [buttonIsDisabled, setButtonDisabled] = useState(true);
+  useEffect(() => {
+    setBun(constructor.find((elem) => elem.type === "bun"));
+    setMainIngredients(constructor.filter((elem) => elem.type !== "bun"));
+    setPrice(constructor.reduce((sum, element) => sum + element.price, 0));
+    constructor.find((elem) => elem.type === "bun") &&
+    constructor.find((elem) => elem.type !== "bun")
+      ? setButtonDisabled(false)
+      : setButtonDisabled(true);
+  }, [constructor]);
+
+  const deleteIngredient = (elem: any) => {
+    const newContructorIng = [...constructor].filter(
+      (a) => a.key_uuid !== elem.key_uuid
+    );
+    dispatch(updateConstructorItems(newContructorIng));
+    dispatch(decreseCountIngredient(elem._id));
+  };
+
   return (
-    <section className={styles.section}>
+    <section ref={dropRef} className={styles.section}>
       <div className={styles.constructor}>
-        <div className={`${styles.card} ${styles.cardTopBottom}`}>
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text={`${breadElement?.text}`}
-            price={breadElement?.price || 0}
-            thumbnail={breadElement?.thumbnail || ""}
-          />
-        </div>
+        {bun ? (
+          <div className={`${styles.card} ${styles.cardTopBottom}`}>
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={`${bun?.name} (верх)`}
+              price={bun?.price || 0}
+              thumbnail={bun?.image || ""}
+            />
+          </div>
+        ) : (
+          <div className={`${styles.card} ${styles.cardTopBottom}`}>
+            <div className={styles.cardTopWithoutIng}>Выберите булку</div>
+          </div>
+        )}
 
         <div className={styles.mainCards}>
-          {mainElements &&
-            mainElements.map((elem) => {
+          {mainIngredients ? (
+            mainIngredients.map((elem) => {
               return (
                 <div
-                  key={elem.id_for_key}
+                  key={elem.key_uuid}
                   className={`${styles.card} ${styles.cardMain}`}
                 >
                   <span className={styles.dragIcon}>
                     <DragIcon type="primary" />
                   </span>
                   <ConstructorElement
-                    type={elem.type}
-                    text={`${elem.text}`}
+                    text={`${elem.name}`}
                     price={elem.price}
-                    thumbnail={elem.thumbnail}
+                    thumbnail={elem.image || ""}
                     extraClass={styles.card}
+                    handleClose={() => deleteIngredient(elem)}
                   />
                 </div>
               );
-            })}
+            })
+          ) : (
+            <div className={`${styles.card} ${styles.cardMain}`}>
+              <span className={styles.cardMainWithoutIng}>
+                Выберете начинку
+              </span>
+            </div>
+          )}
         </div>
 
-        <div className={`${styles.card} ${styles.cardTopBottom}`}>
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text={`${breadElement?.text}`}
-            price={breadElement?.price || 0}
-            thumbnail={breadElement?.thumbnail || ""}
-          />
-        </div>
+        {bun ? (
+          <div className={`${styles.card} ${styles.cardTopBottom}`}>
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={`${bun?.name} (низ)`}
+              price={bun?.price || 0}
+              thumbnail={bun?.image || ""}
+            />
+          </div>
+        ) : (
+          <div className={`${styles.card} ${styles.cardTopBottom}`}>
+            <div className={styles.cardBottomWithoutIng}>Выберите булку</div>
+          </div>
+        )}
       </div>
       <div className={styles.price}>
         <span className="text text_type_digits-medium">{price}</span>
@@ -117,13 +175,14 @@ const BurgerConstructor: FC<Props> = ({ price }) => {
           htmlType="button"
           type="primary"
           size="medium"
+          disabled={buttonIsDisabled}
         >
           Оформить заказ
         </Button>
       </div>
       {isOpenModal && (
         <Modal closeModal={closeModal}>
-          <OrderDetails orderNumber={orderNumber}></OrderDetails>
+          <OrderDetails isOrderLoading={isOrderLoading}></OrderDetails>
         </Modal>
       )}
     </section>

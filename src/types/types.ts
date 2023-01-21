@@ -11,7 +11,8 @@ export type TypeIngredientsElem = {
 		image_mobile?: string,
 		image_large?: string,
 		__v?: number,
-		count: number,
+		count: number | 0,
+		key_uuid?: string,
 }
 
 export type TypeConstructorElem = {
