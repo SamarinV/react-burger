@@ -3,8 +3,9 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { FC } from "react";
 import { TypeIngredientsElem } from "../../types/types";
 import { useDrag } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addModalContent } from "../../store/modalContentSlice";
+import React from "react";
 
 type Props = {
   elem: TypeIngredientsElem;
@@ -41,4 +42,4 @@ const Ingredient: FC<Props> = ({ elem }) => {
   );
 };
 
-export default Ingredient;
+export default React.memo(Ingredient);

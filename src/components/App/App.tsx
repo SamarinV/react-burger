@@ -6,7 +6,7 @@ import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import { useSelector, useDispatch } from "react-redux";
 import {
   addIngInConstructor,
-  updateConstructorItems,
+  updateConstructor,
 } from "../../store/constructorSlice";
 import { increseCountIngredient } from "../../store/ingredientsSlice";
 import { DndProvider } from "react-dnd";
@@ -27,7 +27,7 @@ function App() {
       const WithNewBun = newArr.filter((elem) => elem.type !== "bun");
       WithNewBun.push(newElem);
       WithNewBun.push(newElem); // две булки
-      dispatch(updateConstructorItems(WithNewBun));
+      dispatch(updateConstructor(WithNewBun));
     } else {
       const a = { ...newElem, key_uuid: uuid() };
       dispatch(addIngInConstructor(a));

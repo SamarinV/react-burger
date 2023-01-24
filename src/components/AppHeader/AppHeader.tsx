@@ -5,6 +5,7 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import React from "react";
 import { FC } from "react";
 import styles from "./AppHeader.module.css";
 
@@ -48,4 +49,4 @@ const AppHeader: FC = () => {
   );
 };
 
-export default AppHeader;
+export default React.memo(AppHeader);
