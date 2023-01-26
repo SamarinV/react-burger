@@ -1,19 +1,27 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { TypeIngredientsElem } from '../types/types'
+
+type ModalState = {
+  item: null | TypeIngredientsElem,
+}
+
+const initialState: ModalState = {
+		item: null,
+}
 
 export const modalContentSlice = createSlice({
 	name: 'modalContent',
-	initialState: { items: null },
+	initialState,
 	reducers: {
-		addModalContent: (state, action) => {
-			state.items = action.payload
+		addModalContent: (state, action: PayloadAction<TypeIngredientsElem>) => {
+			state.item = action.payload
 		},
 		deleteModalContent: (state) => {
-			state.items = null
+			state.item = null
 		},
 	},
 })
 
-// Action creators are generated for each case reducer function
 export const { addModalContent, deleteModalContent } = modalContentSlice.actions
 
-export default modalContentSlice.reducer
+export default modalContentSlice

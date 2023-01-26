@@ -3,7 +3,7 @@ import Appheader from "../AppHeader/AppHeader";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 import { TypeIngredientsElem } from "../../types/types";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
   addIngInConstructor,
   updateConstructor,
@@ -14,10 +14,10 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { v4 as uuid } from "uuid";
 
 function App() {
-  const constructor: TypeIngredientsElem[] = useSelector(
-    (store: any) => store.construtorIng.items
+  const constructor: TypeIngredientsElem[] = useAppSelector(
+    (store) => store.construtorIng.items
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   //FUTURE Добавление ингредиентов в конструктор и обновление значений count в ингредиентах
   const addNewIngredient = (newElem: TypeIngredientsElem) => {

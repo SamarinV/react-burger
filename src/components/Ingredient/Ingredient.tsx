@@ -3,7 +3,8 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { FC } from "react";
 import { TypeIngredientsElem } from "../../types/types";
 import { useDrag } from "react-dnd";
-import { useDispatch } from "react-redux";
+
+import { useAppDispatch } from "../../hooks";
 import { addModalContent } from "../../store/modalContentSlice";
 import React from "react";
 
@@ -12,8 +13,8 @@ type Props = {
 };
 
 const Ingredient: FC<Props> = ({ elem }) => {
-  const dispatch = useDispatch();
-  const [{ isDrag }, dragRef] = useDrag({
+  const dispatch = useAppDispatch();
+  const [, dragRef] = useDrag({
     type: "ingredients",
     item: elem,
     collect: (monitor) => ({

@@ -88,5 +88,5 @@
 }
 .dragIcon {
 	margin-right: var(--m2);
-	cursor: grab;
+	cursor: move;
 }

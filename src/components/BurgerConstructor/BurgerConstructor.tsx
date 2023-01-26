@@ -1,3 +1,4 @@
+import styles from "./BurgerConstructor.module.css";
 import {
   ConstructorElement,
   CurrencyIcon,
@@ -5,28 +6,19 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useEffect, useRef, useState } from "react";
-import styles from "./BurgerConstructor.module.css";
+import { useDrag, useDrop } from "react-dnd";
+
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { API_ORDER } from "../../constants";
 
-import { useSelector, useDispatch } from "react-redux";
-import { TypeConstructorElem, TypeIngredientsElem } from "../../types/types";
-import { addOrder } from "../../store/orderNumberSlice";
-import {
-  replaceIngredient,
-  updateConstructor,
-} from "../../store/constructorSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { TypeIngredientsElem } from "../../types/types";
+import { fetchOrder } from "../../store/orderNumberSlice";
+import { updateConstructor } from "../../store/constructorSlice";
 import { decreseCountIngredient } from "../../store/ingredientsSlice";
-import { useDrag, useDrop } from "react-dnd";
-//
-//
-///
-//
-//
 
 type PropsConstructor = {
-  addNewIngredient: any;
+  addNewIngredient: (elem: TypeIngredientsElem) => void;
 };
 
 type PropsMainIng = {
@@ -36,8 +28,8 @@ type PropsMainIng = {
 };
 
 const MainIngredients: FC<PropsMainIng> = ({ elem, index, id }) => {
-  const constructor: TypeIngredientsElem[] = useSelector(
-    (store: any) => store.construtorIng.items
+  const constructor: TypeIngredientsElem[] = useAppSelector(
+    (store) => store.construtorIng.items
   );
 
   const deleteIngredient = (elem: TypeIngredientsElem) => {
@@ -48,7 +40,7 @@ const MainIngredients: FC<PropsMainIng> = ({ elem, index, id }) => {
     dispatch(decreseCountIngredient(elem._id));
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const ref = useRef(null);
 
   const replaceIngredient = (dragID: string, hoverID: string) => {
@@ -137,17 +129,17 @@ const MainIngredients: FC<PropsMainIng> = ({ elem, index, id }) => {
 };
 
 const BurgerConstructor: FC<PropsConstructor> = ({ addNewIngredient }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const constructor: TypeIngredientsElem[] = useSelector(
-    (store: any) => store.construtorIng.items
+  const constructor: TypeIngredientsElem[] = useAppSelector(
+    (store) => store.construtorIng.items
   );
 
   const [price, setPrice] = useState(0); //итоговая стоимость в конструкторе
 
   const [, dropRef] = useDrop({
     accept: "ingredients",
-    drop(item) {
+    drop(item: TypeIngredientsElem) {
       addNewIngredient(item);
     },
     collect: (monitor) => ({
@@ -159,35 +151,12 @@ const BurgerConstructor: FC<PropsConstructor> = ({ addNewIngredient }) => {
   const closeModal = () => {
     setIsOpenModal(false);
   };
+
   const openModal = () => {
-    fetchOrder();
+    const ingredientsID = constructor.map((elem) => elem._id);
+    dispatch(fetchOrder(ingredientsID));
     setIsOpenModal(true);
   };
-
-  const ingredientsID = constructor.map((elem) => elem._id);
-
-  const [isOrderLoading, setIsOrderLoading] = useState(false);
-  function fetchOrder() {
-    setIsOrderLoading(true);
-    fetch(API_ORDER, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ingredients: ingredientsID }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка ${res.status}`);
-      })
-      .then((data) => {
-        dispatch(addOrder(data.order.number));
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => setIsOrderLoading(false));
-  }
 
   const [bun, setBun] = useState<TypeIngredientsElem | undefined>();
   const [mainIngredients, setMainIngredients] = useState<
@@ -278,7 +247,7 @@ const BurgerConstructor: FC<PropsConstructor> = ({ addNewIngredient }) => {
       </div>
       {isOpenModal && (
         <Modal closeModal={closeModal}>
-          <OrderDetails isOrderLoading={isOrderLoading}></OrderDetails>
+          <OrderDetails />
         </Modal>
       )}
     </section>

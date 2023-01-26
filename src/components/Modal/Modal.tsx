@@ -3,21 +3,21 @@ import ModalOverlay from "../ModalOverlay/ModalOverlay";
 import { FC, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { deleteModalContent } from "../../store/modalContentSlice";
 
 type Props = {
-  closeModal?: any;
+  closeModal?: () => void;
   title?: string;
   children: React.ReactElement;
 };
 const root = document.getElementById("modal")!;
 
 const Modal: FC<Props> = ({ title, closeModal, children }) => {
-  const contentIng = useSelector((state: any) => state.modalContent.items);
-  const dispatch = useDispatch();
+  const contentIng = useAppSelector((state) => state.modalContent.item);
+  const dispatch = useAppDispatch();
   const close = () => {
-    contentIng !== null ? dispatch(deleteModalContent()) : closeModal();
+    contentIng !== null ? dispatch(deleteModalContent()) : closeModal!();
   };
   useEffect(() => {
     const closeByEscape = (e: KeyboardEvent) => {
