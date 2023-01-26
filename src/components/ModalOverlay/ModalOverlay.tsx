@@ -2,10 +2,10 @@ import { FC } from "react";
 import styles from "./ModalOverlay.module.css";
 
 type Props = {
-  onClick: () => void;
+  closeModal: () => void;
 };
-const ModalOverlay: FC<Props> = ({ onClick }) => {
-  return <div onClick={() => onClick()} className={styles.modalOverlay}></div>;
+const ModalOverlay: FC<Props> = ({ closeModal }) => {
+  return <div onClick={closeModal} className={styles.modalOverlay}></div>;
 };
 
 export default ModalOverlay;

@@ -10,6 +10,7 @@ import { fetchAllIngredients } from "../../store/ingredientsSlice";
 import Loader from "../../UI/Loader";
 import { InView } from "react-intersection-observer";
 import React from "react";
+import { deleteModalContent } from "../../store/modalContentSlice";
 
 const BurgerIngredients: FC = () => {
   const dispatch = useAppDispatch();
@@ -89,6 +90,10 @@ const BurgerIngredients: FC = () => {
     );
   };
 
+  const closeModal = () => {
+    dispatch(deleteModalContent());
+  };
+
   return (
     <>
       <section className={styles.section}>
@@ -139,7 +144,7 @@ const BurgerIngredients: FC = () => {
           )}
         </div>
         {modalContent && (
-          <Modal title="Детали ингредиента">
+          <Modal closeModal={closeModal} title="Детали ингредиента">
             <IngredientsDetails elem={modalContent}></IngredientsDetails>
           </Modal>
         )}

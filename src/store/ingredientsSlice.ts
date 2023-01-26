@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { API_INGREDIENTS } from "../constants";
+import { BASE_URL } from "../constants";
 import { TypeIngredientsElem } from "../types/types";
+import { checkResponse } from "../utils/checkResponse";
 
 type IngredientsState = {
-  items: [],
+  items: TypeIngredientsElem[] | [],
 	status: null | 'loading' | 'resolved' | 'rejected',
 	error: any,
 }
@@ -18,17 +19,12 @@ export const fetchAllIngredients = createAsyncThunk(
 	"ingredients/fetchAllIngredients",
 	async function (_, {rejectWithValue}) {
 		try {
-			const response = await fetch(API_INGREDIENTS);
-			if (!response.ok) {
-				throw new Error('Ошибка сервера')
-			}
-			const { data } = await response.json();
+			const {data} = await fetch(`${BASE_URL}/ingredients`).then(checkResponse);
 			const ingredientsWithCount = data.map((elem: TypeIngredientsElem) => {
 				elem.count = 0;
 				return elem;
 			});
-			return ingredientsWithCount
-			
+			return ingredientsWithCount;
 		} catch (error: any) {
 			return rejectWithValue(error.message)
 		}
@@ -76,8 +72,8 @@ export const ingredientsSlice = createSlice({
 				state.status = "loading";
 				state.error = null;
 			})
-			.addCase(fetchAllIngredients.fulfilled, (state, { payload }) => {
-				state.items = payload;
+			.addCase(fetchAllIngredients.fulfilled, (state, action: any) => {
+				state.items = action.payload;
 				state.status = "resolved";
 			})
 			.addCase(fetchAllIngredients.rejected, (state, action) => {

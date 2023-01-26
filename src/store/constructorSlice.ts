@@ -19,11 +19,14 @@ export const constructorSlice = createSlice({
 		updateConstructor: (state, action: PayloadAction<TypeIngredientsElem[]>) => {
 			state.items = action.payload
 		},
+		resetConstructorIng: (state) => {
+			state.items = []
+		}
 	},
 })
 
 // Action creators are generated for each case reducer function
-export const { addIngInConstructor, updateConstructor } = constructorSlice.actions
+export const { addIngInConstructor, updateConstructor, resetConstructorIng } = constructorSlice.actions
 
 export default constructorSlice
 

@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { API_ORDER } from '../constants';
+import { BASE_URL } from '../constants';
+import { checkResponse } from '../utils/checkResponse';
+import { resetConstructorIng } from './constructorSlice';
 
 type OrderNumberState = {
   orderNumber: null | number,
@@ -17,17 +19,13 @@ export const fetchOrder = createAsyncThunk(
 	"ingredients/fetchOrder",
 	async (ingredientsID: string[],  {rejectWithValue, dispatch}) => {
 		try {
-			const response = await fetch(API_ORDER, {
+			const response = await fetch(`${BASE_URL}/orders`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ ingredients: ingredientsID }),
-			});
-			if (!response.ok) {
-				throw new Error('Ошибка сервера')
-			}
-			const data = await response.json()
-			dispatch(addOrder(data.order.number));
-			
+			}).then(checkResponse);
+			dispatch(addOrder(response.order.number));
+    	dispatch(resetConstructorIng());
 		} catch (error: any) {
 			return rejectWithValue(error.message)
 		}

@@ -24,10 +24,10 @@ function App() {
     dispatch(increseCountIngredient(newElem));
     const newArr = [...constructor];
     if (newElem.type === "bun") {
-      const WithNewBun = newArr.filter((elem) => elem.type !== "bun");
-      WithNewBun.push(newElem);
-      WithNewBun.push(newElem); // две булки
-      dispatch(updateConstructor(WithNewBun));
+      const withNewBun = newArr.filter((elem) => elem.type !== "bun");
+      withNewBun.push(newElem);
+      withNewBun.push(newElem); // две булки
+      dispatch(updateConstructor(withNewBun));
     } else {
       const a = { ...newElem, key_uuid: uuid() };
       dispatch(addIngInConstructor(a));
