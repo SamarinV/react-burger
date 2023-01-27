@@ -13,8 +13,6 @@ type Props = {
 const root = document.getElementById("modal")!;
 
 const Modal: FC<Props> = ({ title, closeModal, children }) => {
-  const dispatch = useAppDispatch();
-
   useEffect(() => {
     const closeByEscape = (e: KeyboardEvent) => {
       e.key === "Escape" && closeModal();
@@ -23,7 +21,7 @@ const Modal: FC<Props> = ({ title, closeModal, children }) => {
     return () => {
       document.removeEventListener("keydown", closeByEscape);
     };
-  }, [dispatch]);
+  }, []);
 
   return ReactDOM.createPortal(
     <div className={styles.wrapper}>

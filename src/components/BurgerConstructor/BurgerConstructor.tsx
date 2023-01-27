@@ -158,7 +158,7 @@ const BurgerConstructor: FC<PropsConstructor> = ({ addNewIngredient }) => {
     setIsOpenModal(true);
   };
 
-  const [bun, setBun] = useState<TypeIngredientsElem | undefined>();
+  const [bun, setBun] = useState<TypeIngredientsElem | null>();
   const [mainIngredients, setMainIngredients] = useState<
     TypeIngredientsElem[] | null
   >();
@@ -173,6 +173,8 @@ const BurgerConstructor: FC<PropsConstructor> = ({ addNewIngredient }) => {
       ? setButtonDisabled(false)
       : setButtonDisabled(true);
   }, [constructor]);
+
+  console.log(bun, mainIngredients);
 
   return (
     <section ref={dropRef} className={styles.section}>
@@ -194,7 +196,7 @@ const BurgerConstructor: FC<PropsConstructor> = ({ addNewIngredient }) => {
         )}
 
         <div className={styles.mainCards}>
-          {mainIngredients ? (
+          {mainIngredients && mainIngredients.length > 0 ? (
             mainIngredients.map((elem, index: number) => {
               return (
                 <MainIngredients
