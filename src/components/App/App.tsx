@@ -1,157 +1,53 @@
 import styles from "./App.module.css";
 import Appheader from "../AppHeader/AppHeader";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
-import { TypeConstructorElem } from "../../types/types";
 import { TypeIngredientsElem } from "../../types/types";
-import { useEffect, useState } from "react";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
-import Loader from "../../UI/Loader";
-import { API_INGREDIENTS } from "../../constants";
-import { ConstructorContext } from "../../context/ConstructorContext";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import {
+  addIngInConstructor,
+  updateConstructor,
+} from "../../store/constructorSlice";
+import { increseCountIngredient } from "../../store/ingredientsSlice";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { v4 as uuid } from "uuid";
 
 function App() {
-  const [ingredients, setIngredients] = useState<TypeIngredientsElem[]>([]);
-  const [constructor, setConstructor] = useState<TypeConstructorElem[]>([]);
-  const [price, setPrice] = useState(0); //итоговая стоимость в конструкторе
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const constructor: TypeIngredientsElem[] = useAppSelector(
+    (store) => store.construtorIng.items
+  );
+  const dispatch = useAppDispatch();
 
-  function fetchIngredients() {
-    setIsLoading(true);
-    fetch(API_INGREDIENTS)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка ${res.status}`);
-      })
-      .then(({ data }: { data: TypeIngredientsElem[] }) => {
-        const bread = data.find((elem) => elem.type === "bun")!;
-        const main = data.find((elem) => elem.type === "main")!;
-        const defaultConstructor: TypeConstructorElem[] = [
-          {
-            _id: bread._id,
-            type: "top",
-            isLocked: true,
-            text: bread.name + " (верх)",
-            price: bread.price,
-            thumbnail: bread.image || "",
-          },
-          {
-            _id: main._id,
-            text: main.name,
-            price: main.price,
-            thumbnail: main.image || "",
-          },
-          {
-            _id: bread._id,
-            type: "bottom",
-            isLocked: true,
-            text: bread.name + " (низ)",
-            price: bread.price,
-            thumbnail: bread.image || "",
-          },
-        ];
-        setConstructor(defaultConstructor);
-        setPrice(
-          defaultConstructor.reduce((sum, element) => sum + element.price, 0)
-        );
-        setIngredients(
-          data.map((el) => {
-            el.count = defaultConstructor.some((c) => c._id === el._id)
-              ? el.type === "bun"
-                ? 2
-                : 1
-              : 0;
-            return el;
-          })
-        );
-      })
-      .catch((error) => {
-        setIsError(true);
-        console.log(error);
-      })
-      .finally(() => setIsLoading(false));
-  }
-
-  useEffect(() => {
-    fetchIngredients();
-  }, []);
+  //FUTURE Добавление ингредиентов в конструктор и обновление значений count в ингредиентах
+  const addNewIngredient = (newElem: TypeIngredientsElem) => {
+    dispatch(increseCountIngredient(newElem));
+    const newArr = [...constructor];
+    if (newElem.type === "bun") {
+      const withNewBun = newArr.filter((elem) => elem.type !== "bun");
+      withNewBun.push(newElem);
+      withNewBun.push(newElem); // две булки
+      dispatch(updateConstructor(withNewBun));
+    } else {
+      const a = { ...newElem, key_uuid: uuid() };
+      dispatch(addIngInConstructor(a));
+    }
+  };
 
   return (
     <div className={styles.App}>
       <div className={styles.headerWrapper}>
         <Appheader />
       </div>
-      {isLoading ? (
-        <Loader />
-      ) : isError ? (
-        <h1>Ошибка</h1>
-      ) : (
-        <>
-          <main className={styles.main}>
-            <BurgerIngredients ingredients={ingredients} />
-            <ConstructorContext.Provider value={constructor}>
-              <BurgerConstructor price={price} />
-            </ConstructorContext.Provider>
-          </main>
-        </>
-      )}
+
+      <main className={styles.main}>
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor addNewIngredient={addNewIngredient} />
+        </DndProvider>
+      </main>
     </div>
   );
 }
 
 export default App;
-
-//FUTURE Добавление ингредиентов в конструктор и обновление значений count в ингредиентах
-// const addNewIngredient = (newElem: TypeIngredientsElem) => {
-//   const newArrayConstructor = [...constructor];
-//   const newArrayIngredients = [...ingredients];
-
-//   if (newElem.type === "bun") {
-//     newArrayIngredients.map((element) => {
-//       if (element.type === "bun" && element.name !== newElem.name) {
-//         element.count = 0;
-//       }
-//       return element;
-//     });
-//     newArrayIngredients.map((element) => {
-//       if (element.name === newElem.name) {
-//         element.count = 1;
-//       }
-//       return element;
-//     });
-//     newArrayConstructor.splice(0, 1, {
-//       _id: newElem._id,
-//       type: "top",
-//       isLocked: true,
-//       text: newElem.name + " (верх)",
-//       price: newElem.price,
-//       thumbnail: newElem.image || "",
-//     });
-//     newArrayConstructor.splice(newArrayConstructor.length - 1, 1, {
-//       _id: newElem._id,
-//       type: "bottom",
-//       isLocked: true,
-//       text: newElem.name + " (низ)",
-//       price: newElem.price,
-//       thumbnail: newElem.image || "",
-//     });
-//   } else {
-//     newArrayIngredients.map((element) => {
-//       if (element.name === newElem.name) {
-//         element.count++;
-//       }
-//       return element;
-//     });
-//     newArrayConstructor.splice(1, 0, {
-//       _id: newElem._id,
-//       text: newElem.name,
-//       price: newElem.price,
-//       thumbnail: newElem.image || "",
-//     });
-//   }
-//   setIngredients(newArrayIngredients);
-//   setConstructor(newArrayConstructor);
-//   setPrice(recountPrice(newArrayConstructor));
-// };
