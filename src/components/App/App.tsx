@@ -1,51 +1,36 @@
 import styles from "./App.module.css";
 import Appheader from "../AppHeader/AppHeader";
-import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
-import { TypeIngredientsElem } from "../../types/types";
-import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
-  addIngInConstructor,
-  updateConstructor,
-} from "../../store/constructorSlice";
-import { increseCountIngredient } from "../../store/ingredientsSlice";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { v4 as uuid } from "uuid";
+  HomePage,
+  LoginPage,
+  RegisterPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  ProfilePage,
+  NotFoundPage,
+  OrderFeed,
+} from "../../pages";
 
 function App() {
-  const constructor: TypeIngredientsElem[] = useAppSelector(
-    (store) => store.construtorIng.items
-  );
-  const dispatch = useAppDispatch();
-
-  //FUTURE Добавление ингредиентов в конструктор и обновление значений count в ингредиентах
-  const addNewIngredient = (newElem: TypeIngredientsElem) => {
-    dispatch(increseCountIngredient(newElem));
-    const newArr = [...constructor];
-    if (newElem.type === "bun") {
-      const withNewBun = newArr.filter((elem) => elem.type !== "bun");
-      withNewBun.push(newElem);
-      withNewBun.push(newElem); // две булки
-      dispatch(updateConstructor(withNewBun));
-    } else {
-      const a = { ...newElem, key_uuid: uuid() };
-      dispatch(addIngInConstructor(a));
-    }
-  };
-
   return (
     <div className={styles.App}>
-      <div className={styles.headerWrapper}>
+      <BrowserRouter basename="/react-burger">
         <Appheader />
-      </div>
-
-      <main className={styles.main}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor addNewIngredient={addNewIngredient} />
-        </DndProvider>
-      </main>
+        <main className={styles.main}>
+          <Routes>
+            <Route path="" element={<HomePage />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+            <Route path="forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="reset-password" element={<ResetPasswordPage />} />
+            <Route path="order-feed" element={<OrderFeed />} />
+            {/* <Route path="profile" element={<ProfilePage />} /> */}
+            {/* <Route path="ingredients/:id" element={<IngredientsPage />} /> */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
     </div>
   );
 }
