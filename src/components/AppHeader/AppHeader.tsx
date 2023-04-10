@@ -8,6 +8,7 @@ import {
 import React from "react";
 import { FC } from "react";
 import styles from "./AppHeader.module.css";
+import { Link } from "react-router-dom";
 
 const AppHeader: FC = () => {
   return (
@@ -16,11 +17,12 @@ const AppHeader: FC = () => {
         <div className={styles.wrapperForTwoButton}>
           <Button extraClass={styles.button} htmlType="button" type="secondary">
             <BurgerIcon type="primary" />
-            <p
+            <Link
+              to="/"
               className={`text text_type_main-default text_color_inactive ${styles.marginLeft}`}
             >
               Конструктор
-            </p>
+            </Link>
           </Button>
           <Button
             extraClass={`${styles.button} ${styles.marginLeft}`}
@@ -28,9 +30,12 @@ const AppHeader: FC = () => {
             type="secondary"
           >
             <ListIcon type="primary" />
-            <p className={`text text_type_main-default ${styles.marginLeft}`}>
+            <Link
+              to="/order-feed"
+              className={`text text_type_main-default ${styles.marginLeft}`}
+            >
               Лента заказов
-            </p>
+            </Link>
           </Button>
         </div>
         <Logo />
@@ -40,9 +45,12 @@ const AppHeader: FC = () => {
           type="secondary"
         >
           <ProfileIcon type="primary" />
-          <p className={`text text_type_main-default ${styles.marginLeft}`}>
+          <Link
+            to="/login"
+            className={`text text_type_main-default ${styles.marginLeft}`}
+          >
             Личный кабинет
-          </p>
+          </Link>
         </Button>
       </div>
     </header>

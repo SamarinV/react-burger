@@ -1,5 +1,4 @@
 .section{
-	margin-top: var(--m15);
 	display: flex;
 	flex-direction: column;
 }

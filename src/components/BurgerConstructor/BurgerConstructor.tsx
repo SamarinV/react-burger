@@ -174,8 +174,6 @@ const BurgerConstructor: FC<PropsConstructor> = ({ addNewIngredient }) => {
       : setButtonDisabled(true);
   }, [constructor]);
 
-  console.log(bun, mainIngredients);
-
   return (
     <section ref={dropRef} className={styles.section}>
       <div className={styles.constructor}>
@@ -191,7 +189,9 @@ const BurgerConstructor: FC<PropsConstructor> = ({ addNewIngredient }) => {
           </div>
         ) : (
           <div className={`${styles.card} ${styles.cardTopBottom}`}>
-            <div className={styles.cardTopWithoutIng}>Выберите булку</div>
+            <div className={styles.cardTopWithoutIng}>
+              Переместите сюда булку
+            </div>
           </div>
         )}
 
@@ -210,7 +210,7 @@ const BurgerConstructor: FC<PropsConstructor> = ({ addNewIngredient }) => {
           ) : (
             <div className={`${styles.card} ${styles.cardMain}`}>
               <span className={styles.cardMainWithoutIng}>
-                Выберете начинку
+                Переместите сюда начинку
               </span>
             </div>
           )}
@@ -228,7 +228,9 @@ const BurgerConstructor: FC<PropsConstructor> = ({ addNewIngredient }) => {
           </div>
         ) : (
           <div className={`${styles.card} ${styles.cardTopBottom}`}>
-            <div className={styles.cardBottomWithoutIng}>Выберите булку</div>
+            <div className={styles.cardBottomWithoutIng}>
+              Переместите сюда булку
+            </div>
           </div>
         )}
       </div>
