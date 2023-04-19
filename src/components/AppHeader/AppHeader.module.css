@@ -11,15 +11,30 @@
 }
 .wrapperForTwoButton{
 	display: flex;
-}
-.button {
-	display: flex;
-	align-items: center;
+	justify-content: space-around;
 }
 .butonMarginLeft {
 	margin-left: auto;
 }
-.marginLeft{
-	margin-left: var(--m2);
+.link{
+	padding: 0 10px;
+	display: flex;
+	align-items: center;
+	border-radius: 15px;
+	height: 80px;
+	color: #8585AD;
+	text-decoration: none;
+}
+.linkActive{
+	color: white;
+	text-decoration: underline;
+}
+.link:hover{
+	background-color: rgba(125, 90, 252, 0.3);
+		transition: 2s;
+}
+.lastLink{
+	display: flex;
+	justify-content:flex-end;
 }
 

@@ -4,7 +4,7 @@ export const OrderFeed = () => {
   const orders = () => {};
   return (
     <div>
-      <p>ORDERS</p>
+      <h2>Лента заказов пока не готова...</h2>
     </div>
   );
 };

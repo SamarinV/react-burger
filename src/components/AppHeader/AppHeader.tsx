@@ -1,57 +1,67 @@
 import {
-  Button,
   Logo,
   BurgerIcon,
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
+import React, { useState } from "react";
 import { FC } from "react";
 import styles from "./AppHeader.module.css";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const AppHeader: FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.wrapper}>
         <div className={styles.wrapperForTwoButton}>
-          <Button extraClass={styles.button} htmlType="button" type="secondary">
-            <BurgerIcon type="primary" />
-            <Link
-              to="/"
-              className={`text text_type_main-default text_color_inactive ${styles.marginLeft}`}
-            >
-              Конструктор
-            </Link>
-          </Button>
-          <Button
-            extraClass={`${styles.button} ${styles.marginLeft}`}
-            htmlType="button"
-            type="secondary"
+          <NavLink
+            to="/"
+            className={`text text_type_main-default ${styles.link}`}
           >
-            <ListIcon type="primary" />
-            <Link
-              to="/order-feed"
-              className={`text text_type_main-default ${styles.marginLeft}`}
-            >
-              Лента заказов
-            </Link>
-          </Button>
+            {({ isActive }) => (
+              <>
+                <BurgerIcon type="primary" />
+                <span className={isActive ? `${styles.linkActive}` : ""}>
+                  Конструктор
+                </span>
+              </>
+            )}
+          </NavLink>
+
+          <NavLink
+            to="/order-feed"
+            className={`text text_type_main-default ${styles.link}`}
+          >
+            {({ isActive }) => (
+              <>
+                <ListIcon type="primary" />
+                <span className={isActive ? `${styles.linkActive}` : ""}>
+                  Лента заказов
+                </span>
+              </>
+            )}
+          </NavLink>
         </div>
-        <Logo />
-        <Button
-          extraClass={`${styles.button} ${styles.butonMarginLeft}`}
-          htmlType="button"
-          type="secondary"
-        >
-          <ProfileIcon type="primary" />
-          <Link
+
+        <span className={` ${styles.mainLogo}`}>
+          <Logo />
+        </span>
+
+        <div className={styles.lastLink}>
+          <NavLink
             to="/login"
-            className={`text text_type_main-default ${styles.marginLeft}`}
+            className={`text text_type_main-default ${styles.link}`}
           >
-            Личный кабинет
-          </Link>
-        </Button>
+            {({ isActive, isPending }) => (
+              <>
+                <ProfileIcon type="primary" />
+                <span className={isActive ? `${styles.linkActive}` : ""}>
+                  Логин
+                </span>
+              </>
+            )}
+          </NavLink>
+        </div>
       </div>
     </header>
   );

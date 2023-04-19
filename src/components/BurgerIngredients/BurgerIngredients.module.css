@@ -11,7 +11,7 @@
 	margin-top: var(--m10);
 	overflow-y: scroll;
 	scroll-behavior: smooth;
-	height: 450px;
+	height: 50vh;
 	scrollbar-color: #8585AD #2F2F37;
 	scrollbar-width: thin;
 }
